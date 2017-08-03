@@ -1,13 +1,18 @@
-class perceptron
-{
-public:
-	perceptron(float eta, int epochs);
-	float netInput(std::vector<float> X);
-	int predict(std::vector<float> X);
-	// input is a matrix of inputs X and y is the feature we are looking for
-	void fit(std::vector< std::vector<char> > X, std::vector<float> y);
-private:
-	float m_eta;
-	int m_epochs;
-	std::vector<float> m_weights; 
+#include <math.h>
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+
+enum activationFunctions {THRESHOLD = 1, SIGMOID, HYPERBOLIC_TANGENT};
+class Perceptron {
+ private:
+  std::vector<float> inputVector;  // Vector of perceptron input values
+  std::vector<float> weightVector;  // Vector of perceptron weights
+  int activationFunc;
+ public:
+  Perceptron(int inputNumber, int function);  // Constructor
+  void inputAt(int inputPos, float inputValue);  // Input population function
+  float calculateNet();  // activation function type
+  void adjustWeights(float learningRate, float output, float target);  // Change weights based on output target relation
+  float recall(float red, float green, float blue);
 };
