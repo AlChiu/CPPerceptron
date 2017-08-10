@@ -4,7 +4,7 @@
 #define CLASS_BLUE 1
 #define CLASS_RED 0
 #define NO_PATTERNS 13  // Number of inputs we have
-#define LEAST_MSE 0.001  // Error threshold
+#define LEAST_MSE 0.0001  // Error threshold
 #define LEARNING_RATE 0.01  // Set learning rate
 
 float normalize(float x);
@@ -28,17 +28,19 @@ int ourInput[] = {
 };
 
 int main() {
-  float output, result;
-  int inputCounter;
-
-  Perceptron RedBlue(3, SIGMOID);
-  float mse = 999;
+  float output, result, mse = 999;
   int epochs = 0;
 
+  Perceptron RedBlue(3, SIGMOID);
+
+  std::cout << "Initial random weights: ";
+  RedBlue.printWeightVec();
+
   // Training of the network
-  while (fabs(mse - LEAST_MSE) > 0.0001) {
+  while (fabs(mse - LEAST_MSE) >= 0.0005) {
     mse = 0;
     float error = 0;
+    int inputCounter = 0;
 
     // Run through all patterns will equate to one epoch
     for (int i = 0; i < NO_PATTERNS; ++i) {
@@ -58,8 +60,12 @@ int main() {
 
     // Calculate the mean square error of the epoch
     mse = error/NO_PATTERNS;
-    printf("The mean square error of %d epoch is %.4f \r\n", epochs, mse);
     epochs++;
+
+    printf("The mean square error of %d epoch is %.6f \r\n", epochs, mse);
+    std::cout << "The resulting weight vector for this epoch is: ";
+    RedBlue.printWeightVec();
+    std::cout << std::endl;
   }
 
   // With training complete, we can ask the user for input
@@ -110,8 +116,8 @@ int main() {
 }
 
 float normalize(float x) {
-  x = (1./255.) * x;
-  return x;
+  float y = (1./255.) * x;
+  return y;
 }
 
 bool streamIsNumeric(char inp[1024]) {

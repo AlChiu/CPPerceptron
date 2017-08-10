@@ -15,4 +15,6 @@ class Perceptron {
   float calculateNet();  // activation function type
   void adjustWeights(float learningRate, float output, float target);  // Change weights based on output target relation
   float recall(float red, float green, float blue);
+  void printWeightVec();
+  void printInputVec();
 };
