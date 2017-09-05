@@ -16,7 +16,6 @@ MLP::MLP(int hL, int hN) {
     printf("There was an error detecting img0.bmp\n\r");
     return;
   }
-  std::cout << inputN << std::endl;
 
   // Allocate memory for the weights
   weights.reserve(inputN * hiddenN + (hiddenN * hiddenN * (hiddenL - 1)) + hiddenN * outputN);
@@ -60,20 +59,23 @@ bool MLP::populateInput(int fileNum) {
 
   // Grab image data
   data = reader -> getImgData();
-  for (int i = 0; i < inputN; ++i) {
-    std::cout << static_cast<int>(data[i]) << " ";
-  }
+
+  // Data is stored in every fourth byte of the image
+  // Need to remove and compact the useful data
+  int n = static_cast<int>(ceil(static_cast<float>(reader -> returnSize()) / 4));
+  signed char B[n];
+
+  // Storing in reverse because bmp images store from bottom up.
+  for (int i = n - 1; i >= 0; --i)
+    B[i] = data[4 * i];
 
   // Assign value to input neurons
   for (int i = 0; i < inputN; ++i) {
-    if (data[i / 8] & (0x01 << (7 - (i % 8)))) {
-      inputNeurons.at(i) = 1.0;  //  If there is something, turn neuron on
-    } else {
-      inputNeurons.at(i) = 0.0;  //  Otherwise, the neuron is off
-    }
+    if (B[i / 8] & (0x01 << (7 - (i % 8))))
+      inputNeurons.at(i) = 0.0;  //  If the pixel is white, turn neuron off
+    else
+      inputNeurons.at(i) = 1.0;  //  Otherwise, the neuron is on
   }
-
-  //printInput();
   return true;
 }
 
@@ -245,7 +247,7 @@ bool MLP::trainNetwork(float teachingStep, float lmse, float momentum, int train
 
 void MLP::printInput() {
   for (int i = 0; i < inputN; ++i)
-    printf("%.1f ", inputNeurons[i]);
+    printf("%f ", inputNeurons[i]);
   printf("\n\r");
 }
 
@@ -254,7 +256,7 @@ void MLP::recallNetwork(int fileNum) {
   // Populate the input neurons
   printf("Populating the input with image %d\n\r", fileNum);
   populateInput(fileNum);
-
+  
   // Calculate the network
   printf("Calculating network\n\r");
   calculateNetwork();

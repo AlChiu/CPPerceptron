@@ -8,6 +8,7 @@
 #define BMPWIDTH 0x12
 #define BMPHEIGHT 0x16
 #define BMPBPP 0x1C
+#define COMP 0x1E
 
 #define GOALFILENAME "goals.txt"
 
@@ -20,6 +21,7 @@ class FileReader {
   std::ifstream fs;
   int width;
   int height;
+  int imageSize;
  public:
   FileReader();
   ~FileReader();
@@ -34,5 +36,5 @@ class FileReader {
   // Function to convert bytes into an int
   int bytesToInt(char* bytes, int number);
   // Function to find the endianess of the machine
-  int getEndianess();
+  int returnSize();
 };

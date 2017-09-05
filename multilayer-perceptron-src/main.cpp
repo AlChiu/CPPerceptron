@@ -22,9 +22,9 @@ int main(int argc, const char* argv[]) {
   float momentum = atof(argv[6]);
 
   MLP* neuralNetwork = new MLP(hiddenLayers, hiddenNeurons);
-  neuralNetwork -> populateInput(0);
+  neuralNetwork -> populateInput(2);
 
-  /*if (!(neuralNetwork -> trainNetwork(learningRate, leastMSE, momentum, noOfBitmaps))) {
+  if (!(neuralNetwork -> trainNetwork(learningRate, leastMSE, momentum, noOfBitmaps))) {
     printf("There was an error in training ... Quitting\n\r");
     printf("\n\rPress any key to continue and exit the program\n\r");
     getchar();
@@ -44,7 +44,7 @@ int main(int argc, const char* argv[]) {
     } else {
       continue;  // ask again
     }
-  }*/
+  }
 
   printf("\n\rExiting the program\n\r");
   std::cin.ignore();

@@ -32,7 +32,7 @@ bool FileReader::readBitmap(int fileNum) {
     return false;
   }
   fs.seekg(BMPBPP);
-  fs.read(check, 1);
+  fs.read(check, 2);
 
   // Check if the image is monochrome
   if (static_cast<int>(*check) != 1) {
@@ -51,6 +51,10 @@ bool FileReader::readBitmap(int fileNum) {
   fs.read(check, 4);
 
   dataSize = bytesToInt(check, 4);
+  imageSize = dataSize;
+
+  fs.seekg(COMP);
+  fs.read(check, 4);
 
   // If this is the first image we read
   if (firstImageRead) {
@@ -147,4 +151,9 @@ int FileReader::bytesToInt(char* bytes, int number) {
     return -1;
 
   return n;
+}
+
+// Return the image size
+int FileReader::returnSize() {
+  return imageSize;
 }
